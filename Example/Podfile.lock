@@ -1,0 +1,25 @@
+PODS:
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - PALFMDB (0.1.0):
+    - FMDB (= 2.7.5)
+
+DEPENDENCIES:
+  - PALFMDB (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - FMDB
+
+EXTERNAL SOURCES:
+  PALFMDB:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  PALFMDB: db5cf538603dbd8fe6b803756761b9e7e68ff77b
+
+PODFILE CHECKSUM: 5a992683fdaaebc74b960bc9e75515e3eebf3d77
+
+COCOAPODS: 1.10.0

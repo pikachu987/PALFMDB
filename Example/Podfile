@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '9.0'
+
+target 'PALFMDB_Example' do
+  pod 'PALFMDB', :path => '../'
+
+  target 'PALFMDB_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
