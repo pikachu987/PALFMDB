@@ -48,6 +48,10 @@ extension Repository {
 
 extension Repository.Table {
     open class Item: NSObject {
+        public override init() {
+            super.init()
+        }
+
         public required init?(_ resultSet: Repository.ResultSet) {
             super.init()
         }
