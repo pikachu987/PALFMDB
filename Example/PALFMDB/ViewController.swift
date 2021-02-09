@@ -57,10 +57,10 @@ class ViewController: UIViewController {
                 print("failure: \(query)\nlastErrorMessage: \(lastErrorMessage)")
             }
             
-            let lastRowidResult = Repository.Test.lastRowid(database)
-            if case let .success(.rowid(_, query, rowid)) = lastRowidResult {
-                print("success: \(query), rowid: \(rowid)")
-            } else if case let .failure(.insert(_, query, lastErrorMessage)) = lastRowidResult {
+            let lastRowIdResult = Repository.Test.lastRowId(database)
+            if case let .success(.rowId(_, query, rowId)) = lastRowIdResult {
+                print("success: \(query), rowId: \(rowId)")
+            } else if case let .failure(.insert(_, query, lastErrorMessage)) = lastRowIdResult {
                 print("failure: \(query)\nlastErrorMessage: \(lastErrorMessage)")
             }
             

@@ -23,13 +23,16 @@ import FMDB
 
 open class Repository {
     public static var tables: [Repository.Table.Type] = []
-    public static var queue: String = "com.pikachu987.palfmdb"
     public static var resourceName = (Bundle.main.infoDictionary?["CFBundleName"] as? String)?.components(separatedBy: ".").last?.appending(".db") ?? ""
 
     public static let `default` = Repository.Default()
 
     public static var database: Database {
         return Repository.default.database
+    }
+    
+    public static var queue: DatabaseQueue? {
+        return Repository.default.queue
     }
 
     @discardableResult

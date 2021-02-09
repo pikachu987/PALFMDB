@@ -80,8 +80,8 @@ extension Repository.Table {
             return .failure(errorCode)
         } else if case let .success(resultSet) = result {
             resultSet.result.next()
-            let rowid = Int(resultSet.result.int(forColumnIndex: 0))
-            return .success(.rowId(database, query, rowid))
+            let rowId = Int(resultSet.result.int(forColumnIndex: 0))
+            return .success(.rowId(database, query, rowId))
         } else {
             fatalError()
         }

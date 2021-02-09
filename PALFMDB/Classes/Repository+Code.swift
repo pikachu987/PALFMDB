@@ -79,10 +79,10 @@ extension Repository {
             return self.database.lastErrorMessage()
         }
 
-        public var rowid: Int {
+        public var rowId: Int {
             switch self {
-            case .rowId(_, _, let rowid):
-                return rowid
+            case .rowId(_, _, let rowId):
+                return rowId
             default:
                 return 0
             }

@@ -23,6 +23,12 @@ import FMDB
 
 extension Repository {
     open class Default: NSObject {
+        public static var path = "/fmdb/dump"
+
+        public let queue: DatabaseQueue? = {
+            return DatabaseQueue(path: Default.path)
+        }()
+
         public let databasePath: String = {
             guard let databasePath = try? FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(Repository.resourceName).path else {
                 fatalError()
@@ -43,6 +49,10 @@ extension Repository {
     }
     
     open class Database: FMDatabase {
+        
+    }
+
+    open class DatabaseQueue: FMDatabaseQueue {
         
     }
 }
