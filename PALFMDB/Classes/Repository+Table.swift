@@ -57,7 +57,6 @@ extension Repository.Table {
         }
         
         open class func object<E: Repository.Table.Item>(_ type: E.Type, resultSet: Repository.ResultSet) -> E? {
-            resultSet.result.next()
             return type.init(resultSet)
         }
 
@@ -74,7 +73,7 @@ extension Repository.Table {
 }
 
 extension Repository.Table {
-    open class func lastRowid(_ database: Repository.Database) -> Result<Repository.SuccessCode, Repository.ErrorCode> {
+    open class func lastRowId(_ database: Repository.Database) -> Result<Repository.SuccessCode, Repository.ErrorCode> {
         let query = "SELECT last_insert_rowid();"
         let result = Repository.Action.select(database, query: query)
         if case let .failure(errorCode) = result {
@@ -82,7 +81,7 @@ extension Repository.Table {
         } else if case let .success(resultSet) = result {
             resultSet.result.next()
             let rowid = Int(resultSet.result.int(forColumnIndex: 0))
-            return .success(.rowid(database, query, rowid))
+            return .success(.rowId(database, query, rowid))
         } else {
             fatalError()
         }

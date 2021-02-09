@@ -25,7 +25,7 @@ import FMDB
 extension Repository {
     public enum SuccessCode {
         case `default`(Database, String)
-        case rowid(Database, String, Int)
+        case rowId(Database, String, Int)
         case count(Database, String, Int)
         case object(Database, String, Repository.Table.Item?)
         case list(Database, String, [Repository.Table.Item])
@@ -37,7 +37,7 @@ extension Repository {
             switch self {
             case .`default`(_, let query):
                 return query
-            case .rowid(_, let query, _):
+            case .rowId(_, let query, _):
                 return query
             case .count(_, let query, _):
                 return query
@@ -58,7 +58,7 @@ extension Repository {
             switch self {
             case .`default`(let database, _):
                 return database
-            case .rowid(let database, _, _):
+            case .rowId(let database, _, _):
                 return database
             case .count(let database, _, _):
                 return database
@@ -81,7 +81,7 @@ extension Repository {
 
         public var rowid: Int {
             switch self {
-            case .rowid(_, _, let rowid):
+            case .rowId(_, _, let rowid):
                 return rowid
             default:
                 return 0
