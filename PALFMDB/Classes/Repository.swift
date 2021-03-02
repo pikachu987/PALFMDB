@@ -23,6 +23,7 @@ import FMDB
 
 open class Repository {
     public static var tables: [Repository.Table.Type] = []
+    public static var databasePath: String = Repository.Default.databasePath
     public static var resourceName = (Bundle.main.infoDictionary?["CFBundleName"] as? String)?.components(separatedBy: ".").last?.appending(".db") ?? ""
 
     public static let `default` = Repository.Default()

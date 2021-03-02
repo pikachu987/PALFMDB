@@ -29,7 +29,7 @@ extension Repository {
             return DatabaseQueue(path: Default.path)
         }()
 
-        public let databasePath: String = {
+        public static let databasePath: String = {
             guard let databasePath = try? FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(Repository.resourceName).path else {
                 fatalError()
             }
@@ -38,7 +38,7 @@ extension Repository {
 
         public var database: Database {
             guard let database = self._database else {
-                let database = Database(path: self.databasePath)
+                let database = Database(path: Repository.databasePath)
                 self._database = database
                 return database
             }
