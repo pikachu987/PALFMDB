@@ -44,7 +44,7 @@ open class Repository {
                 return .failure(.open(database, query, database.lastErrorMessage()))
             }
             database.executeStatements(query)
-            return .success(.default(database, query))
+            return .success(.default(database))
         } else {
             return .failure(.createIfExistTable(database, query, database.lastErrorMessage()))
         }
@@ -58,7 +58,7 @@ open class Repository {
                 return .failure(.open(database, query, database.lastErrorMessage()))
             }
             database.executeStatements(query)
-            return .success(.default(database, query))
+            return .success(.default(database))
         } else {
             return .failure(.dropTable(database, query, database.lastErrorMessage()))
         }
@@ -72,7 +72,7 @@ open class Repository {
                 return .failure(.open(database, query, database.lastErrorMessage()))
             }
             database.executeStatements(query)
-            return .success(.default(database, query))
+            return .success(.default(database))
         } else {
             return .failure(.alertIfExistsTable(database, query, database.lastErrorMessage()))
         }

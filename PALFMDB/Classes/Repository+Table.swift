@@ -81,7 +81,7 @@ extension Repository.Table {
         } else if case let .success(resultSet) = result {
             resultSet.result.next()
             let rowId = Int(resultSet.result.int(forColumnIndex: 0))
-            return .success(.rowId(database, query, rowId))
+            return .success(.rowId(database, rowId))
         } else {
             fatalError()
         }
@@ -95,7 +95,7 @@ extension Repository.Table {
         } else if case let .success(resultSet) = result {
             resultSet.result.next()
             let cnt = Int(resultSet.result.int(forColumn: "CNT"))
-            return .success(.count(database, query, cnt))
+            return .success(.count(database, cnt))
         } else {
             fatalError()
         }
@@ -108,8 +108,7 @@ extension Repository.Table {
             return .failure(errorCode)
         } else if case let .success(resultSet) = result {
             let list = self.itemType.list(self.itemType, resultSet: resultSet)
-            list.forEach({ print($0.description) })
-            return .success(.list(database, query, list))
+            return .success(.list(database, list))
         } else {
             fatalError()
         }
@@ -123,7 +122,7 @@ extension Repository.Table {
         } else if case let .success(resultSet) = result {
             resultSet.result.next()
             let item = self.itemType.object(self.itemType, resultSet: resultSet)
-            return .success(.object(database, query, item))
+            return .success(.object(database, item))
         } else {
             fatalError()
         }
@@ -135,7 +134,7 @@ extension Repository.Table {
         if case let .failure(errorCode) = result {
             return .failure(errorCode)
         } else if case .success = result {
-            return .success(.delete(database, query))
+            return .success(.delete(database))
         } else {
             fatalError()
         }

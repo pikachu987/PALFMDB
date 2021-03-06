@@ -24,53 +24,32 @@ import FMDB
 // Repository + Code
 extension Repository {
     public enum SuccessCode {
-        case `default`(Database, String)
-        case rowId(Database, String, Int)
-        case count(Database, String, Int)
-        case object(Database, String, Repository.Table.Item?)
-        case list(Database, String, [Repository.Table.Item])
-        case update(Database, String)
-        case insert(Database, String)
-        case delete(Database, String)
-
-        public var query: String {
-            switch self {
-            case .`default`(_, let query):
-                return query
-            case .rowId(_, let query, _):
-                return query
-            case .count(_, let query, _):
-                return query
-            case .object(_, let query, _):
-                return query
-            case .list(_, let query, _):
-                return query
-            case .update(_, let query):
-                return query
-            case .insert(_, let query):
-                return query
-            case .delete(_, let query):
-                return query
-            }
-        }
+        case `default`(Database)
+        case rowId(Database, Int)
+        case count(Database, Int)
+        case object(Database, Repository.Table.Item?)
+        case list(Database, [Repository.Table.Item])
+        case update(Database)
+        case insert(Database)
+        case delete(Database)
 
         public var database: Database {
             switch self {
-            case .`default`(let database, _):
+            case .`default`(let database):
                 return database
-            case .rowId(let database, _, _):
+            case .rowId(let database, _):
                 return database
-            case .count(let database, _, _):
+            case .count(let database, _):
                 return database
-            case .object(let database, _, _):
+            case .object(let database, _):
                 return database
-            case .list(let database, _, _):
+            case .list(let database, _):
                 return database
-            case .update(let database, _):
+            case .update(let database):
                 return database
-            case .insert(let database, _):
+            case .insert(let database):
                 return database
-            case .delete(let database, _):
+            case .delete(let database):
                 return database
             }
         }
@@ -81,7 +60,7 @@ extension Repository {
 
         public var rowId: Int {
             switch self {
-            case .rowId(_, _, let rowId):
+            case .rowId(_, let rowId):
                 return rowId
             default:
                 return 0
@@ -90,7 +69,7 @@ extension Repository {
 
         public var count: Int {
             switch self {
-            case .count(_, _, let count):
+            case .count(_, let count):
                 return count
             default:
                 return 0
@@ -99,7 +78,7 @@ extension Repository {
 
         public var object: Repository.Table.Item? {
             switch self {
-            case .object(_, _, let object):
+            case .object(_, let object):
                 return object
             default:
                 return nil
@@ -108,7 +87,7 @@ extension Repository {
 
         public var list: [Repository.Table.Item] {
             switch self {
-            case .list(_, _, let list):
+            case .list(_, let list):
                 return list
             default:
                 return []
