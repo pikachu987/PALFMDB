@@ -25,11 +25,9 @@ extension Repository {
     open class Default: NSObject {
         public static var path = "/fmdb/dump"
 
-        public let queue: DatabaseQueue? = {
-            return DatabaseQueue(path: Default.path)
-        }()
+        public let queue: DatabaseQueue? = { DatabaseQueue(path: Default.path) }()
 
-        public static let databasePath: String = {
+        public static var databasePath: String = {
             guard let databasePath = try? FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(Repository.resourceName).path else {
                 fatalError()
             }
@@ -37,7 +35,7 @@ extension Repository {
         }()
 
         public var database: Database {
-            guard let database = self._database else {
+            guard let database = _database else {
                 let database = Database(path: Repository.databasePath)
                 self._database = database
                 return database

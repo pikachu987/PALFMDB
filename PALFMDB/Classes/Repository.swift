@@ -24,57 +24,59 @@ import FMDB
 open class Repository {
     public static var tables: [Repository.Table.Type] = []
     public static var databasePath: String = Repository.Default.databasePath
-    public static var resourceName = (Bundle.main.infoDictionary?["CFBundleName"] as? String)?.components(separatedBy: ".").last?.appending(".db") ?? ""
+    public class var resourceName: String {
+        (Bundle.main.infoDictionary?["CFBundleName"] as? String)?.components(separatedBy: ".").last?.appending(".db") ?? ""
+    }
 
     public static let `default` = Repository.Default()
 
     public static var database: Database {
-        return Repository.default.database
+        Repository.default.database
     }
     
     public static var queue: DatabaseQueue? {
-        return Repository.default.queue
+        Repository.default.queue
     }
 
     @discardableResult
-    public class func createIfExistsTable(_ database: Database) -> Result<SuccessCode, ErrorCode> {
-        let query = self.tables.filter({ $0.createIfExistTableQuery != "" }).map({ $0.createIfExistTableQuery }).joined(separator: "")
+    public class func createIfExistsTable(_ database: Database) -> Result<Void, ErrorCode> {
+        let query = tables.filter({ $0.createIfExistTableQuery != "" }).map({ $0.createIfExistTableQuery }).joined(separator: "")
         if query != "" {
             if !database.isOpen && !database.open() {
                 return .failure(.open(database, query, database.lastErrorMessage()))
             }
             database.executeStatements(query)
-            return .success(.default(database))
+            return .success(())
         } else {
             return .failure(.createIfExistTable(database, query, database.lastErrorMessage()))
         }
     }
 
     @discardableResult
-    public class func dropTable(_ database: Database) -> Result<SuccessCode, ErrorCode> {
-        let query = self.tables.filter({ $0.dropTableQuery != "" }).map({ $0.dropTableQuery }).joined(separator: "")
+    public class func dropTable(_ database: Database) -> Result<Void, ErrorCode> {
+        let query = tables.filter({ $0.dropTableQuery != "" }).map({ $0.dropTableQuery }).joined(separator: "")
         if query != "" {
             if !database.isOpen && !database.open() {
                 return .failure(.open(database, query, database.lastErrorMessage()))
             }
             database.executeStatements(query)
-            return .success(.default(database))
+            return .success(())
         } else {
             return .failure(.dropTable(database, query, database.lastErrorMessage()))
         }
     }
 
     @discardableResult
-    public class func alertIfExistsTable(_ database: Database) -> Result<SuccessCode, ErrorCode> {
-        let query = self.tables.filter({ $0.alertIfExistsTableQuery != "" }).map({ $0.alertIfExistsTableQuery }).joined(separator: "")
+    public class func alterIfExistsTable(_ database: Database) -> Result<Void, ErrorCode> {
+        let query = tables.filter({ $0.alterIfExistsTableQuery != "" }).map({ $0.alterIfExistsTableQuery }).joined(separator: "")
         if query != "" {
             if !database.isOpen && !database.open() {
                 return .failure(.open(database, query, database.lastErrorMessage()))
             }
             database.executeStatements(query)
-            return .success(.default(database))
+            return .success(())
         } else {
-            return .failure(.alertIfExistsTable(database, query, database.lastErrorMessage()))
+            return .failure(.alterIfExistsTable(database, query, database.lastErrorMessage()))
         }
     }
     

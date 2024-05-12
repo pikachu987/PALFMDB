@@ -23,83 +23,11 @@ import FMDB
 
 // Repository + Code
 extension Repository {
-    public enum SuccessCode {
-        case `default`(Database)
-        case rowId(Database, Int)
-        case count(Database, Int)
-        case object(Database, Repository.Table.Item?)
-        case list(Database, [Repository.Table.Item])
-        case update(Database)
-        case insert(Database)
-        case delete(Database)
-
-        public var database: Database {
-            switch self {
-            case .`default`(let database):
-                return database
-            case .rowId(let database, _):
-                return database
-            case .count(let database, _):
-                return database
-            case .object(let database, _):
-                return database
-            case .list(let database, _):
-                return database
-            case .update(let database):
-                return database
-            case .insert(let database):
-                return database
-            case .delete(let database):
-                return database
-            }
-        }
-
-        public var errorMessage: String {
-            return self.database.lastErrorMessage()
-        }
-
-        public var rowId: Int {
-            switch self {
-            case .rowId(_, let rowId):
-                return rowId
-            default:
-                return 0
-            }
-        }
-
-        public var count: Int {
-            switch self {
-            case .count(_, let count):
-                return count
-            default:
-                return 0
-            }
-        }
-
-        public var object: Repository.Table.Item? {
-            switch self {
-            case .object(_, let object):
-                return object
-            default:
-                return nil
-            }
-        }
-
-        public var list: [Repository.Table.Item] {
-            switch self {
-            case .list(_, let list):
-                return list
-            default:
-                return []
-            }
-        }
-    }
-
     public enum ErrorCode: Error {
         case open(Database, String, String)
         case createIfExistTable(Database, String, String)
         case dropTable(Database, String, String)
-        case alertIfExistsTable(Database, String, String)
+        case alterIfExistsTable(Database, String, String)
         case insert(Database, String, String)
         case select(Database, String, String)
         case update(Database, String, String)
@@ -113,7 +41,7 @@ extension Repository {
                 return query
             case .dropTable(_, _, let query):
                 return query
-            case .alertIfExistsTable(_, _, let query):
+            case .alterIfExistsTable(_, _, let query):
                 return query
             case .insert(_, _, let query):
                 return query
@@ -134,7 +62,7 @@ extension Repository {
                 return database
             case .dropTable(let database, _, _):
                 return database
-            case .alertIfExistsTable(let database, _, _):
+            case .alterIfExistsTable(let database, _, _):
                 return database
             case .insert(let database, _, _):
                 return database
@@ -148,7 +76,7 @@ extension Repository {
         }
 
         public var errorMessage: String {
-            return self.database.lastErrorMessage()
+            database.lastErrorMessage()
         }
     }
 }
