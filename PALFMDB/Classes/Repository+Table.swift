@@ -75,10 +75,10 @@ extension Repository {
         }
 
         open class func list<T: Repository.Table.Item>(_ database: Repository.Database, 
-                                                       column: String = "*",
+                                                       selectColumn: String = "*",
                                                        addQuery: String = "",
                                                        arguments: [Any] = []) -> Result<[T], Repository.ErrorCode> {
-            let query = "SELECT \(column) FROM \(tableName)\(addQuery == "" ? "" : " \(addQuery)");"
+            let query = "SELECT \(selectColumn) FROM \(tableName)\(addQuery == "" ? "" : " \(addQuery)");"
             let result = Repository.Action.select(database, query: query, arguments: arguments)
             if case let .failure(errorCode) = result {
                 return .failure(errorCode)
@@ -88,6 +88,22 @@ extension Repository {
             } else {
                 fatalError()
             }
+        }
+
+        open class func list<T: Repository.Table.Item>(_ database: Repository.Database,
+                                                       selectColumn: String = "*",
+                                                       andColumns: [String],
+                                                       arguments: [Any] = []) -> Result<[T], Repository.ErrorCode> {
+            let addQuery = andColumns.map { "\($0) = ?" }.joined(separator: " AND ").prependWhereIfNotEmpty
+            return list(database, selectColumn: selectColumn, addQuery: addQuery, arguments: arguments)
+        }
+
+        open class func list<T: Repository.Table.Item>(_ database: Repository.Database,
+                                                       selectColumn: String = "*",
+                                                       orColumns: [String],
+                                                       arguments: [Any] = []) -> Result<[T], Repository.ErrorCode> {
+            let addQuery = orColumns.map { "\($0) = ?" }.joined(separator: " OR ").prependWhereIfNotEmpty
+            return list(database, selectColumn: selectColumn, addQuery: addQuery, arguments: arguments)
         }
 
         open class func listResultSet(_ database: Repository.Database, 
@@ -106,10 +122,10 @@ extension Repository {
         }
 
         open class func object<T: Repository.Table.Item>(_ database: Repository.Database,
-                                                         column: String = "*",
+                                                         selectColumn: String = "*",
                                                          addQuery: String = "",
                                                          arguments: [Any] = []) -> Result<T, Repository.ErrorCode> {
-            let query = "SELECT \(column) FROM \(tableName)\(addQuery == "" ? "" : " \(addQuery)");"
+            let query = "SELECT \(selectColumn) FROM \(tableName)\(addQuery == "" ? "" : " \(addQuery)");"
             let result = Repository.Action.select(database, query: query, arguments: arguments)
             if case let .failure(errorCode) = result {
                 return .failure(errorCode)
@@ -122,6 +138,22 @@ extension Repository {
             } else {
                 fatalError()
             }
+        }
+
+        open class func object<T: Repository.Table.Item>(_ database: Repository.Database,
+                                                         selectColumn: String = "*",
+                                                         andColumns: [String],
+                                                         arguments: [Any] = []) -> Result<T, Repository.ErrorCode> {
+            let addQuery = andColumns.map { "\($0) = ?" }.joined(separator: " AND ").prependWhereIfNotEmpty
+            return object(database, selectColumn: selectColumn, addQuery: addQuery, arguments: arguments)
+        }
+
+        open class func object<T: Repository.Table.Item>(_ database: Repository.Database,
+                                                         selectColumn: String = "*",
+                                                         orColumns: [String],
+                                                         arguments: [Any] = []) -> Result<T, Repository.ErrorCode> {
+            let addQuery = orColumns.map { "\($0) = ?" }.joined(separator: " OR ").prependWhereIfNotEmpty
+            return object(database, selectColumn: selectColumn, addQuery: addQuery, arguments: arguments)
         }
 
         open class func objectResultSet(_ database: Repository.Database, 
@@ -153,6 +185,7 @@ extension Repository {
             }
         }
 
+        @discardableResult
         open class func insert(_ database: Repository.Database,
                                columnsQuery: String,
                                valuesList: [[Any]]) -> Result<Void, Repository.ErrorCode> {
@@ -169,7 +202,8 @@ extension Repository {
             }
         }
 
-        open class func delete(_ database: Repository.Database, 
+        @discardableResult
+        open class func delete(_ database: Repository.Database,
                                addQuery: String = "",
                                arguments: [Any] = []) -> Result<Void, Repository.ErrorCode> {
             let query = "DELETE FROM \(tableName)\(addQuery == "" ? "" : " \(addQuery)");"
@@ -183,11 +217,12 @@ extension Repository {
             }
         }
 
-        open class func delete(_ database: Repository.Database, 
+        @discardableResult
+        open class func delete(_ database: Repository.Database,
                                column: String,
-                               value: Any) -> Result<Void, Repository.ErrorCode> {
+                               arguments: Any) -> Result<Void, Repository.ErrorCode> {
             let query = "DELETE FROM \(tableName) WHERE \(column) = ?;"
-            let result = Repository.Action.delete(database, query: query, arguments: [value])
+            let result = Repository.Action.delete(database, query: query, arguments: [arguments])
             if case let .failure(errorCode) = result {
                 return .failure(errorCode)
             } else if case .success = result {
@@ -197,12 +232,13 @@ extension Repository {
             }
         }
 
-        open class func delete(_ database: Repository.Database, 
+        @discardableResult
+        open class func delete(_ database: Repository.Database,
                                column: String,
-                               values: [Any]) -> Result<Void, Repository.ErrorCode> {
-            let deleteIn = values.map { _ in "?" }.joined(separator: ",")
+                               arguments: [Any]) -> Result<Void, Repository.ErrorCode> {
+            let deleteIn = arguments.map { _ in "?" }.joined(separator: ",")
             let query = "DELETE FROM \(tableName) WHERE \(column) IN (\(deleteIn));"
-            let result = Repository.Action.delete(database, query: query, arguments: values)
+            let result = Repository.Action.delete(database, query: query, arguments: arguments)
             if case let .failure(errorCode) = result {
                 return .failure(errorCode)
             } else if case .success = result {
@@ -210,6 +246,22 @@ extension Repository {
             } else {
                 fatalError()
             }
+        }
+
+        @discardableResult
+        open class func delete(_ database: Repository.Database,
+                               andColumns: [String],
+                               arguments: [Any] = []) -> Result<Void, Repository.ErrorCode> {
+            let addQuery = andColumns.map { "\($0) = ?" }.joined(separator: " AND ").prependWhereIfNotEmpty
+            return delete(database, addQuery: addQuery, arguments: arguments)
+        }
+
+        @discardableResult
+        open class func delete(_ database: Repository.Database,
+                               orColumns: [String],
+                               arguments: [Any] = []) -> Result<Void, Repository.ErrorCode> {
+            let addQuery = orColumns.map { "\($0) = ?" }.joined(separator: " OR ").prependWhereIfNotEmpty
+            return delete(database, addQuery: addQuery, arguments: arguments)
         }
     }
 }
@@ -237,5 +289,11 @@ extension Repository.Table {
             }
             return list
         }
+    }
+}
+
+extension String {
+    fileprivate var prependWhereIfNotEmpty: String {
+        isEmpty ? self : "WHERE \(self)"
     }
 }
